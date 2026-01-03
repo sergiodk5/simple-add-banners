@@ -36,5 +36,14 @@ if ( file_exists( SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'lib/scoper-autoload.php' ) ) 
 	require_once SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'lib/scoper-autoload.php';
 }
 
+// Register activation hook.
+register_activation_hook( __FILE__, array( 'SimpleAddBanners\\Activator', 'activate' ) );
+
+// Register deactivation hook.
+register_deactivation_hook( __FILE__, array( 'SimpleAddBanners\\Deactivator', 'deactivate' ) );
+
+// Check for database updates on plugins_loaded.
+add_action( 'plugins_loaded', array( 'SimpleAddBanners\\Activator', 'maybe_update' ) );
+
 // Initialize the plugin.
 SimpleAddBanners\Plugin::get_instance();
