@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Simple Add Banners
- * Plugin URI:        https://example.com/simple-add-banners
+ * Plugin URI:        https://sergiodk5.com
  * Description:       A simple plugin to add banners to your WordPress site.
  * Version:           1.0.0
  * Requires at least: 6.0
