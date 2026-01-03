@@ -96,6 +96,9 @@ class Admin_Menu {
 			return;
 		}
 
+		// Enable WordPress Media Library modal.
+		wp_enqueue_media();
+
 		$asset_path = SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'assets/admin/';
 		$asset_url  = SIMPLE_ADD_BANNERS_PLUGIN_URL . 'assets/admin/';
 

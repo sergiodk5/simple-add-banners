@@ -9,6 +9,7 @@ import DatePicker from 'primevue/datepicker'
 import Button from 'primevue/button'
 import { useToast } from 'primevue/usetoast'
 import { useBannerStore } from '@/stores/bannerStore'
+import ImagePicker from '@/components/ImagePicker.vue'
 import type { Banner, BannerPayload } from '@/types/banner'
 
 const props = defineProps<{
@@ -47,6 +48,8 @@ const form = ref<BannerPayload>({
 
 const startDate = ref<Date | null>(null)
 const endDate = ref<Date | null>(null)
+const desktopImageUrl = ref<string | null>(null)
+const mobileImageUrl = ref<string | null>(null)
 
 const statusOptions = [
   { label: 'Active', value: 'active' },
@@ -70,6 +73,8 @@ const resetForm = () => {
   }
   startDate.value = null
   endDate.value = null
+  desktopImageUrl.value = null
+  mobileImageUrl.value = null
   errors.value = {}
 }
 
@@ -90,6 +95,8 @@ watch(
       }
       startDate.value = banner.start_date ? new Date(banner.start_date) : null
       endDate.value = banner.end_date ? new Date(banner.end_date) : null
+      desktopImageUrl.value = banner.desktop_image_url ?? null
+      mobileImageUrl.value = banner.mobile_image_url ?? null
     } else {
       resetForm()
     }
@@ -234,6 +241,19 @@ const handleCancel = () => {
           class="tw:text-red-500"
         >{{ errors.mobile_url }}</small>
         <small class="tw:text-gray-500">Leave empty to use Desktop URL</small>
+      </div>
+
+      <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+        <ImagePicker
+          v-model="form.desktop_image_id"
+          v-model:image-url="desktopImageUrl"
+          label="Desktop Image"
+        />
+        <ImagePicker
+          v-model="form.mobile_image_id"
+          v-model:image-url="mobileImageUrl"
+          label="Mobile Image"
+        />
       </div>
 
       <div class="tw:grid tw:grid-cols-2 tw:gap-4">

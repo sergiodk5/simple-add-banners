@@ -130,6 +130,8 @@ describe( 'Admin_Menu::enqueue_assets()', function () {
 	} );
 
 	it( 'enqueues production assets when built files exist', function () {
+		Functions\expect( 'wp_enqueue_media' )->once();
+
 		Functions\expect( 'file_exists' )
 			->with( SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'assets/admin/js/admin.js' )
 			->andReturn( true );
@@ -170,6 +172,8 @@ describe( 'Admin_Menu::enqueue_assets()', function () {
 	} );
 
 	it( 'enqueues dev server assets when built files do not exist', function () {
+		Functions\expect( 'wp_enqueue_media' )->once();
+
 		Functions\expect( 'file_exists' )
 			->with( SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'assets/admin/js/admin.js' )
 			->andReturn( false );
@@ -211,6 +215,7 @@ describe( 'Admin_Menu::enqueue_assets()', function () {
 	} );
 
 	it( 'passes correct data to wp_localize_script', function () {
+		Functions\expect( 'wp_enqueue_media' )->once();
 		Functions\expect( 'file_exists' )->andReturn( true );
 		Functions\expect( 'wp_enqueue_script' );
 		Functions\expect( 'wp_enqueue_style' );
