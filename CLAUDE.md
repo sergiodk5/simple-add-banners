@@ -9,13 +9,55 @@ Simple Add Banners is a WordPress plugin for displaying commercial banners with 
 ## Plugin Architecture
 
 ### Directory Structure
-- `simple-add-banners.php` - Main plugin file with header metadata and constants
-- `uninstall.php` - Cleanup logic when plugin is deleted
-- `includes/` - Core PHP classes (shared logic)
-- `admin/` - Admin-specific assets (css/, js/, images/)
-- `public/` - Frontend assets (css/, js/, images/)
-- `languages/` - Translation files
-- `lib/` - Scoped vendor dependencies (generated, do not edit)
+
+```
+simple-add-banners/
+├── simple-add-banners.php    # Bootstrap file (loads autoloader, initializes plugin)
+├── uninstall.php             # Cleanup on plugin deletion
+├── src/                      # PHP classes (PSR-4 autoloaded)
+│   ├── Plugin.php            # Main plugin class
+│   ├── Admin/                # Admin-related classes
+│   ├── Frontend/             # Frontend-related classes
+│   └── Tracking/             # Tracking logic classes
+├── admin/                    # Admin assets only (no PHP)
+│   ├── css/
+│   ├── js/
+│   └── images/
+├── public/                   # Frontend assets only (no PHP)
+│   ├── css/
+│   ├── js/
+│   └── images/
+├── languages/                # Translation files (.pot, .po, .mo)
+├── lib/                      # Scoped vendor dependencies (generated)
+└── docs/                     # Documentation
+```
+
+### Namespace Structure
+
+Uses PSR-4 autoloading with the `SimpleAddBanners` namespace:
+
+```
+SimpleAddBanners\               # Root namespace (src/)
+SimpleAddBanners\Admin\         # Admin classes (src/Admin/)
+SimpleAddBanners\Frontend\      # Frontend classes (src/Frontend/)
+SimpleAddBanners\Tracking\      # Tracking logic (src/Tracking/)
+```
+
+**Creating a new class:**
+```php
+// src/Admin/Banner_Settings.php
+namespace SimpleAddBanners\Admin;
+
+class Banner_Settings {
+    // WordPress-style class name (underscores)
+    // PSR-4 file naming (Banner_Settings.php)
+}
+```
+
+After adding new classes, run:
+```bash
+composer dump-autoload
+```
 
 ### Key Constants
 ```php

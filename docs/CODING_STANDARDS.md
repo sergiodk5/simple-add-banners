@@ -4,11 +4,80 @@ This document outlines the coding standards for the Simple Add Banners plugin, b
 
 ## Table of Contents
 
-1. [PHP Coding Standards](#php-coding-standards)
-2. [JavaScript Coding Standards](#javascript-coding-standards)
-3. [CSS Coding Standards](#css-coding-standards)
-4. [Documentation Standards](#documentation-standards)
-5. [Automated Tools](#automated-tools)
+1. [Namespaces and Autoloading](#namespaces-and-autoloading)
+2. [PHP Coding Standards](#php-coding-standards)
+3. [JavaScript Coding Standards](#javascript-coding-standards)
+4. [CSS Coding Standards](#css-coding-standards)
+5. [Documentation Standards](#documentation-standards)
+6. [Automated Tools](#automated-tools)
+
+---
+
+## Namespaces and Autoloading
+
+This plugin uses PSR-4 autoloading with the `SimpleAddBanners` namespace.
+
+### Directory to Namespace Mapping
+
+| Directory | Namespace |
+|-----------|-----------|
+| `src/` | `SimpleAddBanners\` |
+| `src/Admin/` | `SimpleAddBanners\Admin\` |
+| `src/Frontend/` | `SimpleAddBanners\Frontend\` |
+| `src/Tracking/` | `SimpleAddBanners\Tracking\` |
+
+### Creating a New Class
+
+1. Create the file in the appropriate directory:
+
+```php
+// src/Admin/Banner_List.php
+<?php
+namespace SimpleAddBanners\Admin;
+
+class Banner_List {
+
+    public function __construct() {
+        // ...
+    }
+}
+```
+
+2. Regenerate the autoloader:
+
+```bash
+composer dump-autoload
+```
+
+3. Use the class anywhere:
+
+```php
+use SimpleAddBanners\Admin\Banner_List;
+
+$list = new Banner_List();
+
+// Or with full namespace
+$list = new \SimpleAddBanners\Admin\Banner_List();
+```
+
+### Namespace Guidelines
+
+- Root namespace is `SimpleAddBanners`
+- Sub-namespaces match directory structure
+- One class per file
+- Class name matches filename exactly
+- Use `use` statements at the top of files for cleaner code
+
+### Third-Party Dependencies
+
+Runtime dependencies are scoped to `SimpleAddBanners\Vendor` to prevent conflicts:
+
+```php
+// Using a scoped dependency
+use SimpleAddBanners\Vendor\SomePackage\SomeClass;
+
+$obj = new SomeClass();
+```
 
 ---
 
@@ -23,10 +92,19 @@ This document outlines the coding standards for the Simple Add Banners plugin, b
 | Actions/Filters | Lowercase with underscores | `simple_banners_before_render` |
 | Classes/Traits/Interfaces | Capitalized with underscores | `Banner_Manager` |
 | Constants | Uppercase with underscores | `SIMPLE_ADD_BANNERS_VERSION` |
-| File names | Lowercase with hyphens | `class-banner-manager.php` |
+| Namespaces | PascalCase | `SimpleAddBanners\Admin` |
 
-**Class file naming**: Prefix with `class-` and convert underscores to hyphens:
-- Class `Banner_Manager` → `class-banner-manager.php`
+### File Naming (PSR-4)
+
+This plugin uses PSR-4 autoloading. Class files match the class name exactly:
+
+| Class | File Path |
+|-------|-----------|
+| `SimpleAddBanners\Plugin` | `src/Plugin.php` |
+| `SimpleAddBanners\Admin\Banner_Settings` | `src/Admin/Banner_Settings.php` |
+| `SimpleAddBanners\Tracking\Click_Handler` | `src/Tracking/Click_Handler.php` |
+
+**Note:** We use WordPress-style class names (underscores) with PSR-4 file naming.
 
 ### PHP Tags
 
@@ -161,14 +239,23 @@ $int = ( int ) $value;
 
 ### Include/Require
 
-Use `require_once` without parentheses:
+**For classes in `src/`**: Use the Composer autoloader - no manual requires needed.
+
+```php
+// Classes are autoloaded - just use them
+use SimpleAddBanners\Admin\Banner_Settings;
+
+$settings = new Banner_Settings();
+```
+
+**For other files**: Use `require_once` without parentheses:
 
 ```php
 // Correct
-require_once SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'includes/class-banner-manager.php';
+require_once SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'vendor/autoload.php';
 
 // Incorrect
-require_once( SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'includes/class-banner-manager.php' );
+require_once( SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'vendor/autoload.php' );
 include 'file.php';
 ```
 

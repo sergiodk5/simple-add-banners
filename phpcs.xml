@@ -71,5 +71,12 @@
 		</properties>
 		<exclude-pattern>simple-add-banners.php</exclude-pattern>
 		<exclude-pattern>uninstall.php</exclude-pattern>
+		<!-- PSR-4 autoloaded classes use different naming -->
+		<exclude-pattern>/src/*</exclude-pattern>
+	</rule>
+
+	<!-- Namespaced classes don't need prefixes -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<exclude-pattern>/src/*</exclude-pattern>
 	</rule>
 </ruleset>

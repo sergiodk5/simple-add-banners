@@ -25,3 +25,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'SIMPLE_ADD_BANNERS_VERSION', '1.0.0' );
 define( 'SIMPLE_ADD_BANNERS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SIMPLE_ADD_BANNERS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
+// Load Composer autoloader.
+if ( file_exists( SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
+	require_once SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'vendor/autoload.php';
+}
+
+// Load scoped dependencies autoloader (if exists).
+if ( file_exists( SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'lib/scoper-autoload.php' ) ) {
+	require_once SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'lib/scoper-autoload.php';
+}
+
+// Initialize the plugin.
+SimpleAddBanners\Plugin::get_instance();

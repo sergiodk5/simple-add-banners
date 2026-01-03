@@ -12,6 +12,11 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "wpify/scoper": "^3.2"
     },
+    "autoload": {
+        "psr-4": {
+            "SimpleAddBanners\\": "src/"
+        }
+    },
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
