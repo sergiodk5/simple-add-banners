@@ -9,11 +9,13 @@
     "require-dev": {
         "wp-coding-standards/wpcs": "^3.0",
         "phpcompatibility/phpcompatibility-wp": "^2.1",
-        "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "wpify/scoper": "^3.2"
     },
     "config": {
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "wpify/scoper": true
         }
     },
     "scripts": {
@@ -23,13 +25,29 @@
         "lint:php:file": "phpcs",
         "fix:php": "@phpcbf",
         "fix:php:file": "phpcbf",
-        "compat:php": "phpcs -p --standard=PHPCompatibilityWP --runtime-set testVersion 7.4- ."
+        "compat:php": "phpcs -p --standard=PHPCompatibilityWP --runtime-set testVersion 7.4- .",
+        "scoper": "wpify-scoper install",
+        "scoper:update": "wpify-scoper update",
+        "scoper:clean": "rm -rf lib && rm -f composer-deps.lock"
     },
     "scripts-descriptions": {
         "lint:php": "Check all PHP files against WordPress coding standards",
         "lint:php:file": "Check specific PHP file (usage: composer lint:php:file -- path/to/file.php)",
         "fix:php": "Auto-fix all PHP files",
         "fix:php:file": "Auto-fix specific PHP file (usage: composer fix:php:file -- path/to/file.php)",
-        "compat:php": "Check PHP compatibility with PHP 7.4+"
+        "compat:php": "Check PHP compatibility with PHP 7.4+",
+        "scoper": "Install and scope runtime dependencies from composer-deps.json",
+        "scoper:update": "Update and scope runtime dependencies",
+        "scoper:clean": "Remove scoped dependencies"
+    },
+    "extra": {
+        "wpify-scoper": {
+            "prefix": "SimpleAddBanners\\Vendor",
+            "folder": "lib",
+            "globals": ["wordpress", "woocommerce"],
+            "composerjson": "composer-deps.json",
+            "composerlock": "composer-deps.lock",
+            "autorun": false
+        }
     }
 }

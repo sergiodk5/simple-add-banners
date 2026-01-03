@@ -15,6 +15,7 @@ Simple Add Banners is a WordPress plugin for displaying commercial banners with 
 - `admin/` - Admin-specific assets (css/, js/, images/)
 - `public/` - Frontend assets (css/, js/, images/)
 - `languages/` - Translation files
+- `lib/` - Scoped vendor dependencies (generated, do not edit)
 
 ### Key Constants
 ```php
@@ -98,6 +99,26 @@ npm run fix                                    # Fix JS + CSS
 npm run lint:all                               # Check PHP + JS + CSS
 npm run fix:all                                # Fix PHP + JS + CSS
 ```
+
+### Dependency Scoping
+
+Runtime dependencies are scoped using wpify/scoper to prevent conflicts with other plugins.
+
+```bash
+composer scoper        # Scope dependencies to lib/ folder
+composer scoper:clean  # Remove scoped dependencies
+```
+
+**Adding a runtime dependency:**
+1. Add the package to `composer-deps.json` (not `composer.json`)
+2. Run `composer scoper` to install and scope it
+3. Load the scoped autoloader in the main plugin file:
+   ```php
+   require_once SIMPLE_ADD_BANNERS_PLUGIN_DIR . 'lib/scoper-autoload.php';
+   ```
+4. Use the scoped namespace: `SimpleAddBanners\Vendor\Package\Class`
+
+**Important:** Dev dependencies (linters, etc.) go in `composer.json`. Only runtime dependencies that ship with the plugin go in `composer-deps.json`.
 
 ## Development Notes
 

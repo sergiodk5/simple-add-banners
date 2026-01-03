@@ -1,10 +1,12 @@
 # Dependencies
 /node_modules/
 /vendor/
+/lib/
 
 # Build artifacts
 /build/
 /dist/
+/tmp-*/
 
 # IDE and editors
 .idea/

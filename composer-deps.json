@@ -1,0 +1,13 @@
+{
+    "name": "sergiodk5/simple-add-banners-deps",
+    "description": "Runtime dependencies for Simple Add Banners (will be scoped)",
+    "type": "library",
+    "license": "GPL-2.0-or-later",
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "require": {
+        "php": ">=7.4"
+    }
+}
