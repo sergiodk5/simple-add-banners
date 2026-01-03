@@ -1,0 +1,35 @@
+{
+    "name": "sergiodk5/simple-add-banners",
+    "description": "A simple plugin to add banners to your WordPress site",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.0",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "scripts": {
+        "phpcs": "phpcs",
+        "phpcbf": "phpcbf",
+        "lint:php": "@phpcs",
+        "lint:php:file": "phpcs",
+        "fix:php": "@phpcbf",
+        "fix:php:file": "phpcbf",
+        "compat:php": "phpcs -p --standard=PHPCompatibilityWP --runtime-set testVersion 7.4- ."
+    },
+    "scripts-descriptions": {
+        "lint:php": "Check all PHP files against WordPress coding standards",
+        "lint:php:file": "Check specific PHP file (usage: composer lint:php:file -- path/to/file.php)",
+        "fix:php": "Auto-fix all PHP files",
+        "fix:php:file": "Auto-fix specific PHP file (usage: composer fix:php:file -- path/to/file.php)",
+        "compat:php": "Check PHP compatibility with PHP 7.4+"
+    }
+}

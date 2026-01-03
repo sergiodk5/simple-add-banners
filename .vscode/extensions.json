@@ -1,0 +1,12 @@
+{
+	"recommendations": [
+		"bmewburn.vscode-intelephense-client",
+		"valeryanm.vscode-phpsab",
+		"dbaeumer.vscode-eslint",
+		"stylelint.vscode-stylelint",
+		"editorconfig.editorconfig",
+		"johnbillion.vscode-wordpress-hooks",
+		"wordpresstoolbox.wordpress-toolbox"
+	],
+	"unwantedRecommendations": []
+}

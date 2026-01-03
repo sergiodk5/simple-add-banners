@@ -1,0 +1,29 @@
+{
+  "name": "simple-add-banners",
+  "version": "1.0.0",
+  "description": "A simple plugin to add banners to your WordPress site",
+  "private": true,
+  "scripts": {
+    "lint:js": "eslint admin/js public/js --ext .js",
+    "lint:js:file": "eslint --ext .js",
+    "lint:css": "stylelint \"**/*.css\" --ignore-path .gitignore",
+    "lint:css:file": "stylelint",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:all": "composer lint:php && npm run lint:js && npm run lint:css",
+    "fix:js": "eslint admin/js public/js --ext .js --fix",
+    "fix:js:file": "eslint --ext .js --fix",
+    "fix:css": "stylelint \"**/*.css\" --ignore-path .gitignore --fix",
+    "fix:css:file": "stylelint --fix",
+    "fix": "npm run fix:js && npm run fix:css",
+    "fix:all": "composer fix:php && npm run fix:js && npm run fix:css"
+  },
+  "devDependencies": {
+    "@wordpress/eslint-plugin": "^21.0.0",
+    "@wordpress/stylelint-config": "^22.0.0",
+    "eslint": "^8.57.0",
+    "stylelint": "^14.16.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

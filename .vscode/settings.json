@@ -1,0 +1,107 @@
+{
+	"editor.tabSize": 4,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.rulers": [80, 120],
+	"editor.wordWrap": "off",
+	"editor.renderWhitespace": "trailing",
+	"editor.trimAutoWhitespace": true,
+	"files.trimTrailingWhitespace": true,
+	"files.insertFinalNewline": true,
+	"files.trimFinalNewlines": true,
+
+	"[php]": {
+		"editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+		"editor.formatOnSave": false
+	},
+
+	"[javascript]": {
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint",
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		}
+	},
+
+	"[css]": {
+		"editor.defaultFormatter": "stylelint.vscode-stylelint",
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll.stylelint": "explicit"
+		}
+	},
+
+	"phpcs.enable": true,
+	"phpcs.executablePath": "./vendor/bin/phpcs",
+	"phpcs.standard": "./phpcs.xml",
+	"phpcs.showSources": true,
+
+	"phpcbf.enable": true,
+	"phpcbf.executablePath": "./vendor/bin/phpcbf",
+	"phpcbf.standard": "./phpcs.xml",
+	"phpcbf.onsave": false,
+
+	"eslint.enable": true,
+	"eslint.workingDirectories": ["."],
+	"eslint.validate": ["javascript"],
+
+	"stylelint.enable": true,
+	"stylelint.validate": ["css"],
+
+	"css.validate": false,
+
+	"intelephense.environment.phpVersion": "7.4",
+	"intelephense.diagnostics.undefinedConstants": false,
+	"intelephense.stubs": [
+		"apache",
+		"bcmath",
+		"bz2",
+		"Core",
+		"curl",
+		"date",
+		"dom",
+		"fileinfo",
+		"filter",
+		"gd",
+		"hash",
+		"iconv",
+		"json",
+		"libxml",
+		"mbstring",
+		"mysqli",
+		"openssl",
+		"pcre",
+		"PDO",
+		"Phar",
+		"readline",
+		"Reflection",
+		"session",
+		"SimpleXML",
+		"SPL",
+		"standard",
+		"tokenizer",
+		"xml",
+		"xmlreader",
+		"xmlwriter",
+		"zip",
+		"zlib",
+		"wordpress"
+	],
+
+	"files.associations": {
+		"*.php": "php"
+	},
+
+	"files.exclude": {
+		"**/.git": true,
+		"**/node_modules": true,
+		"**/vendor": true
+	},
+
+	"search.exclude": {
+		"**/node_modules": true,
+		"**/vendor": true,
+		"**/build": true,
+		"**/dist": true
+	}
+}

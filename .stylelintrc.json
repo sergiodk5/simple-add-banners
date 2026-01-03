@@ -1,0 +1,24 @@
+{
+	"extends": "@wordpress/stylelint-config",
+	"rules": {
+		"indentation": "tab",
+		"no-descending-specificity": null,
+		"font-weight-notation": "numeric",
+		"selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+		"selector-id-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+		"max-line-length": [
+			120,
+			{
+				"ignore": ["comments"],
+				"severity": "warning"
+			}
+		]
+	},
+	"ignoreFiles": [
+		"node_modules/**",
+		"vendor/**",
+		"build/**",
+		"dist/**",
+		"**/*.min.css"
+	]
+}
