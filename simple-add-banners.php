@@ -5,7 +5,7 @@
  * Description:       A simple plugin to add banners to your WordPress site.
  * Version:           1.0.0
  * Requires at least: 6.0
- * Requires PHP:      7.4
+ * Requires PHP:      8.4
  * Author:            Asterios Patsikas
  * Author URI:        https://sergiodk5.com
  * License:           GPL v2 or later

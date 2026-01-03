@@ -24,3 +24,4 @@ debug.log
 # Environment files
 .env
 .env.local
+.phpunit.cache/
