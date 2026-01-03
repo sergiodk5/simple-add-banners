@@ -20,11 +20,16 @@
     "admin:build": "npm --prefix admin-ui run build",
     "admin:test": "npm --prefix admin-ui run test:run",
     "admin:test:watch": "npm --prefix admin-ui run test",
+    "cm": "cz",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.3.0",
+    "@commitlint/config-conventional": "^20.3.0",
     "@wordpress/eslint-plugin": "^21.0.0",
     "@wordpress/stylelint-config": "^22.0.0",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.57.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
@@ -46,5 +51,10 @@
     "admin-ui/src/**/*.{ts,vue}": [
       "npm --prefix admin-ui run lint:fix"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
