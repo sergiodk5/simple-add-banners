@@ -3,6 +3,8 @@
  * Tests for Banner_Controller class.
  *
  * @package SimpleAddBanners\Tests\Unit\Api
+ *
+ * @property \Mockery\MockInterface $wpdb
  */
 
 declare(strict_types=1);

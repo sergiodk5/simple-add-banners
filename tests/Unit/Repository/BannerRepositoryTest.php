@@ -3,6 +3,8 @@
  * Tests for Banner_Repository class.
  *
  * @package SimpleAddBanners\Tests\Unit\Repository
+ *
+ * @property \Mockery\MockInterface $wpdb
  */
 
 declare(strict_types=1);
