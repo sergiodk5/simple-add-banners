@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import Button from 'primevue/button'
+import Card from 'primevue/card'
+import InputText from 'primevue/inputtext'
 
 const message = ref('Hello World from Vue 3 + TypeScript!')
 const count = ref(0)
+const searchQuery = ref('')
 
 const increment = () => {
   count.value++
@@ -10,24 +14,39 @@ const increment = () => {
 </script>
 
 <template>
-  <div class="tw:mt-5 tw:rounded tw:border tw:border-gray-300 tw:bg-white tw:p-5">
-    <h1 class="tw:mt-0 tw:text-2xl tw:font-bold tw:text-gray-800">
-      Simple Add Banners
-    </h1>
-    <p class="tw:text-gray-600">
-      {{ message }}
-    </p>
-    <div class="tw:mt-5 tw:rounded tw:bg-gray-100 tw:p-4">
-      <p class="tw:mb-2 tw:text-lg">
-        Count: {{ count }}
-      </p>
-      <button
-        type="button"
-        class="tw:rounded tw:bg-blue-600 tw:px-4 tw:py-2 tw:text-white tw:hover:bg-blue-700"
-        @click="increment"
-      >
-        Increment
-      </button>
-    </div>
+  <div class="tw:mt-5">
+    <Card>
+      <template #title>
+        Simple Add Banners
+      </template>
+      <template #subtitle>
+        {{ message }}
+      </template>
+      <template #content>
+        <div class="tw:mb-4">
+          <label
+            for="search"
+            class="tw:block tw:mb-2 tw:font-medium"
+          >Search</label>
+          <InputText
+            id="search"
+            v-model="searchQuery"
+            placeholder="Search banners..."
+            class="tw:w-full"
+          />
+        </div>
+
+        <div class="tw:rounded tw:bg-gray-100 tw:p-4">
+          <p class="tw:mb-2 tw:text-lg">
+            Count: {{ count }}
+          </p>
+          <Button
+            label="Increment"
+            icon="pi pi-plus"
+            @click="increment"
+          />
+        </div>
+      </template>
+    </Card>
   </div>
 </template>

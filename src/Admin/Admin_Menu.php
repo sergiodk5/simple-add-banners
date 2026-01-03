@@ -110,6 +110,9 @@ class Admin_Menu {
 				true
 			);
 
+			// Add type="module" to the script.
+			add_filter( 'script_loader_tag', array( $this, 'add_module_type' ), 10, 2 );
+
 			// Load CSS if it exists.
 			if ( file_exists( $asset_path . 'css/admin.css' ) ) {
 				wp_enqueue_style(
