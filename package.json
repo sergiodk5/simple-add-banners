@@ -15,15 +15,29 @@
     "fix:css": "stylelint \"assets/**/*.css\" --fix",
     "fix:css:file": "stylelint --fix",
     "fix": "npm run fix:js && npm run fix:css",
-    "fix:all": "composer fix:php && npm run fix:js && npm run fix:css"
+    "fix:all": "composer fix:php && npm run fix:js && npm run fix:css",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@wordpress/eslint-plugin": "^21.0.0",
     "@wordpress/stylelint-config": "^22.0.0",
     "eslint": "^8.57.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "stylelint": "^14.16.0"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "lint-staged": {
+    "*.php": [
+      "composer lint:php:file --"
+    ],
+    "assets/**/*.js": [
+      "eslint --fix"
+    ],
+    "assets/**/*.css": [
+      "stylelint --fix"
+    ]
   }
 }
