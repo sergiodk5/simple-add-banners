@@ -16,18 +16,20 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "tailwindcss": "^4.1.18",
     "vue": "^3.5.13"
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.19.0",
+    "@typescript-eslint/parser": "^8.19.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vitest/coverage-v8": "^2.1.9",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.32.0",
-    "@typescript-eslint/eslint-plugin": "^8.19.0",
-    "@typescript-eslint/parser": "^8.19.0",
     "jsdom": "^25.0.1",
     "prettier": "^3.4.2",
     "typescript": "~5.6.2",

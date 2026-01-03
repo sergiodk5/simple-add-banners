@@ -10,14 +10,20 @@ const increment = () => {
 </script>
 
 <template>
-  <div class="sab-admin-wrapper">
-    <h1>Simple Add Banners</h1>
-    <p>{{ message }}</p>
-    <div class="sab-counter">
-      <p>Count: {{ count }}</p>
+  <div class="tw:mt-5 tw:rounded tw:border tw:border-gray-300 tw:bg-white tw:p-5">
+    <h1 class="tw:mt-0 tw:text-2xl tw:font-bold tw:text-gray-800">
+      Simple Add Banners
+    </h1>
+    <p class="tw:text-gray-600">
+      {{ message }}
+    </p>
+    <div class="tw:mt-5 tw:rounded tw:bg-gray-100 tw:p-4">
+      <p class="tw:mb-2 tw:text-lg">
+        Count: {{ count }}
+      </p>
       <button
         type="button"
-        class="button button-primary"
+        class="tw:rounded tw:bg-blue-600 tw:px-4 tw:py-2 tw:text-white tw:hover:bg-blue-700"
         @click="increment"
       >
         Increment
@@ -25,30 +31,3 @@ const increment = () => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.sab-admin-wrapper {
-  padding: 20px;
-  background: #fff;
-  border: 1px solid #ccd0d4;
-  border-radius: 4px;
-  margin-top: 20px;
-}
-
-.sab-admin-wrapper h1 {
-  margin-top: 0;
-  color: #1d2327;
-}
-
-.sab-counter {
-  margin-top: 20px;
-  padding: 15px;
-  background: #f0f0f1;
-  border-radius: 4px;
-}
-
-.sab-counter p {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-</style>

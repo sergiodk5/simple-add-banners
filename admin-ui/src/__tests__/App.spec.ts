@@ -38,13 +38,16 @@ describe('App', () => {
     expect(button.text()).toBe('Increment')
   })
 
-  it('has the correct wrapper class', () => {
+  it('has the correct wrapper with Tailwind classes', () => {
     const wrapper = mount(App)
-    expect(wrapper.find('.sab-admin-wrapper').exists()).toBe(true)
+    const mainDiv = wrapper.find('div')
+    expect(mainDiv.exists()).toBe(true)
+    expect(mainDiv.classes()).toContain('tw:bg-white')
   })
 
-  it('has the counter section', () => {
+  it('has the counter section with Tailwind classes', () => {
     const wrapper = mount(App)
-    expect(wrapper.find('.sab-counter').exists()).toBe(true)
+    const counterDiv = wrapper.find('.tw\\:bg-gray-100')
+    expect(counterDiv.exists()).toBe(true)
   })
 })
