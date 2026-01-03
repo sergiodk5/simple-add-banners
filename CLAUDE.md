@@ -19,14 +19,15 @@ simple-add-banners/
 │   ├── Admin/                # Admin-related classes
 │   ├── Frontend/             # Frontend-related classes
 │   └── Tracking/             # Tracking logic classes
-├── admin/                    # Admin assets only (no PHP)
-│   ├── css/
-│   ├── js/
-│   └── images/
-├── public/                   # Frontend assets only (no PHP)
-│   ├── css/
-│   ├── js/
-│   └── images/
+├── assets/                   # Static assets (CSS, JS, images)
+│   ├── admin/                # Admin-specific assets
+│   │   ├── css/
+│   │   ├── js/
+│   │   └── images/
+│   └── public/               # Frontend assets
+│       ├── css/
+│       ├── js/
+│       └── images/
 ├── languages/                # Translation files (.pot, .po, .mo)
 ├── lib/                      # Scoped vendor dependencies (generated)
 └── docs/                     # Documentation
