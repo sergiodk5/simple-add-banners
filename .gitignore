@@ -13,6 +13,7 @@
 !/assets/admin/js/.gitkeep
 /assets/admin/css/*
 !/assets/admin/css/.gitkeep
+/assets/admin/assets/
 /assets/admin/.vite/
 
 # IDE and editors

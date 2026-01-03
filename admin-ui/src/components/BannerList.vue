@@ -174,17 +174,17 @@ defineExpose({ loadBanners })
           <div class="tw:flex tw:gap-2">
             <Button
               icon="pi pi-pencil"
-              severity="secondary"
-              text
-              rounded
+              severity="info"
+              size="small"
+              outlined
               aria-label="Edit"
               @click="emit('edit', data)"
             />
             <Button
               icon="pi pi-trash"
               severity="danger"
-              text
-              rounded
+              size="small"
+              outlined
               aria-label="Delete"
               @click="handleDelete(data)"
             />
