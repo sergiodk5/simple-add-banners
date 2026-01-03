@@ -1,78 +1,10 @@
-import axios, { type AxiosInstance, type AxiosError } from 'axios'
+import { getApiClient } from './apiClient'
 import type { Banner, BannerPayload, BannerListParams } from '@/types/banner'
 
-/**
- * WordPress admin configuration injected via wp_localize_script.
- */
-declare global {
-  interface Window {
-    sabAdmin: {
-      apiUrl: string
-      nonce: string
-      adminUrl: string
-    }
-  }
-}
-
-/**
- * API response with pagination headers.
- */
 export interface PaginatedResponse<T> {
   data: T[]
   total: number
   totalPages: number
-}
-
-/**
- * Creates and configures the axios instance.
- */
-export function createApiClient(): AxiosInstance {
-  const client = axios.create({
-    baseURL: window.sabAdmin?.apiUrl || '/wp-json/sab/v1',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  // Add nonce to all requests
-  client.interceptors.request.use((config) => {
-    const nonce = window.sabAdmin?.nonce || ''
-    if (nonce) {
-      config.headers['X-WP-Nonce'] = nonce
-    }
-    return config
-  })
-
-  // Transform error responses
-  client.interceptors.response.use(
-    (response) => response,
-    (error: AxiosError<{ message?: string }>) => {
-      const message = error.response?.data?.message || error.message || 'An error occurred'
-      return Promise.reject(new Error(message))
-    },
-  )
-
-  return client
-}
-
-// Default API client instance
-let apiClient: AxiosInstance | null = null
-
-/**
- * Gets or creates the API client instance.
- */
-export function getApiClient(): AxiosInstance {
-  if (!apiClient) {
-    apiClient = createApiClient()
-  }
-  return apiClient
-}
-
-/**
- * Sets a custom API client (useful for testing).
- */
-export function setApiClient(client: AxiosInstance | null): void {
-  apiClient = client
 }
 
 /**
