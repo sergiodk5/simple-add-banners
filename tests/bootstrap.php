@@ -13,8 +13,9 @@ declare(strict_types=1);
 $plugin_dir = dirname( __DIR__ );
 
 // Define WordPress constants that may be used in the plugin.
+// Point ABSPATH to test fixtures for unit tests (stubs WordPress files).
 if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', dirname( $plugin_dir, 3 ) . '/' );
+	define( 'ABSPATH', $plugin_dir . '/tests/fixtures/' );
 }
 
 if ( ! defined( 'SIMPLE_ADD_BANNERS_VERSION' ) ) {
