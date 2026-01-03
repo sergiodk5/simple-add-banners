@@ -1,6 +1,6 @@
 module.exports = {
 	root: true,
-	extends: [ 'plugin:@wordpress/eslint-plugin/recommended' ],
+	extends: ['plugin:@wordpress/eslint-plugin/recommended'],
 	env: {
 		browser: true,
 		jquery: true,
@@ -12,25 +12,19 @@ module.exports = {
 	},
 	rules: {
 		// Enforce strict equality
-		eqeqeq: [ 'error', 'always' ],
+		eqeqeq: ['error', 'always'],
 
 		// Enforce single quotes
-		quotes: [ 'error', 'single', { avoidEscape: true } ],
+		quotes: ['error', 'single', { avoidEscape: true }],
 
 		// Require semicolons
-		semi: [ 'error', 'always' ],
+		semi: ['error', 'always'],
 
 		// Enforce camelCase
-		camelcase: [ 'error', { properties: 'never' } ],
+		camelcase: ['error', { properties: 'never' }],
 
 		// No console in production
-		'no-console': [ 'warn', { allow: [ 'warn', 'error' ] } ],
-
-		// Spacing
-		'space-in-parens': [ 'error', 'always' ],
-		'array-bracket-spacing': [ 'error', 'always' ],
-		'object-curly-spacing': [ 'error', 'always' ],
-		'computed-property-spacing': [ 'error', 'always' ],
+		'no-console': ['warn', { allow: ['warn', 'error'] }],
 
 		// Yoda conditions not enforced in JS (different from PHP)
 		yoda: 'off',

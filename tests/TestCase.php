@@ -75,7 +75,6 @@ abstract class TestCase extends PHPUnitTestCase {
 	protected function reset_plugin_singleton(): void {
 		$reflection = new \ReflectionClass( \SimpleAddBanners\Plugin::class );
 		$instance   = $reflection->getProperty( 'instance' );
-		$instance->setAccessible( true );
 		$instance->setValue( null, null );
 	}
 }

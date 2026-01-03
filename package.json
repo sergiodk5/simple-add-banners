@@ -18,6 +18,8 @@
     "fix:all": "composer fix:php && npm run fix:js && npm run fix:css",
     "admin:dev": "npm --prefix admin-ui run dev",
     "admin:build": "npm --prefix admin-ui run build",
+    "admin:test": "npm --prefix admin-ui run test:run",
+    "admin:test:watch": "npm --prefix admin-ui run test",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -40,6 +42,9 @@
     ],
     "assets/public/**/*.css": [
       "stylelint --fix"
+    ],
+    "admin-ui/src/**/*.{ts,vue}": [
+      "npm --prefix admin-ui run lint:fix"
     ]
   }
 }

@@ -3,6 +3,8 @@
  * Unit tests for the Plugin class.
  *
  * @package SimpleAddBanners\Tests\Unit
+ *
+ * @method void reset_plugin_singleton()
  */
 
 declare(strict_types=1);
@@ -11,6 +13,7 @@ use Brain\Monkey\Functions;
 use SimpleAddBanners\Plugin;
 
 beforeEach( function () {
+	/** @phpstan-ignore-next-line Method inherited from TestCase via Pest binding */
 	$this->reset_plugin_singleton();
 } );
 

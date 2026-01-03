@@ -15,7 +15,11 @@ const increment = () => {
     <p>{{ message }}</p>
     <div class="sab-counter">
       <p>Count: {{ count }}</p>
-      <button type="button" class="button button-primary" @click="increment">
+      <button
+        type="button"
+        class="button button-primary"
+        @click="increment"
+      >
         Increment
       </button>
     </div>
