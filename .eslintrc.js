@@ -40,6 +40,8 @@ module.exports = {
 		'vendor/',
 		'build/',
 		'dist/',
+		'admin-ui/',
+		'assets/admin/',
 		'*.min.js',
 	],
 };

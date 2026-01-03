@@ -1,5 +1,6 @@
 # Dependencies
 /node_modules/
+/admin-ui/node_modules/
 /vendor/
 /lib/
 
@@ -7,6 +8,7 @@
 /build/
 /dist/
 /tmp-*/
+*.tsbuildinfo
 
 # IDE and editors
 .idea/

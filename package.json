@@ -16,6 +16,8 @@
     "fix:css:file": "stylelint --fix",
     "fix": "npm run fix:js && npm run fix:css",
     "fix:all": "composer fix:php && npm run fix:js && npm run fix:css",
+    "admin:dev": "npm --prefix admin-ui run dev",
+    "admin:build": "npm --prefix admin-ui run build",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -33,10 +35,10 @@
     "*.php": [
       "composer lint:php:file --"
     ],
-    "assets/**/*.js": [
+    "assets/public/**/*.js": [
       "eslint --fix"
     ],
-    "assets/**/*.css": [
+    "assets/public/**/*.css": [
       "stylelint --fix"
     ]
   }

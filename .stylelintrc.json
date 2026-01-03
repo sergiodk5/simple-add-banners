@@ -19,6 +19,8 @@
 		"vendor/**",
 		"build/**",
 		"dist/**",
+		"admin-ui/**",
+		"assets/admin/**",
 		"**/*.min.css"
 	]
 }

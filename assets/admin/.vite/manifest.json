@@ -1,0 +1,11 @@
+{
+  "src/main.ts": {
+    "file": "js/admin.js",
+    "name": "main",
+    "src": "src/main.ts",
+    "isEntry": true,
+    "css": [
+      "css/admin.css"
+    ]
+  }
+}

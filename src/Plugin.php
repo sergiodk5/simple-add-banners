@@ -110,7 +110,7 @@ class Plugin {
 	 * @since 1.0.0
 	 */
 	private function init_admin(): void {
-		// Admin components will be initialized here.
+		new Admin\Admin_Menu();
 	}
 
 	/**
