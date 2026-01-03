@@ -9,6 +9,11 @@
 /dist/
 /tmp-*/
 *.tsbuildinfo
+/assets/admin/js/*
+!/assets/admin/js/.gitkeep
+/assets/admin/css/*
+!/assets/admin/css/.gitkeep
+/assets/admin/.vite/
 
 # IDE and editors
 .idea/
