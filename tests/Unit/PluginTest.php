@@ -104,3 +104,30 @@ describe( 'Plugin Component Initialization', function () {
 	} );
 
 } );
+
+describe( 'Plugin REST API Routes', function () {
+
+	it( 'registers banner REST routes', function () {
+		// Mock wpdb for the Banner_Controller constructor.
+		$wpdb         = Mockery::mock( 'wpdb' );
+		$wpdb->prefix = 'wp_';
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$GLOBALS['wpdb'] = $wpdb;
+
+		Functions\when( '__' )->returnArg();
+		Functions\when( 'wp_parse_args' )->alias(
+			function ( $args, $defaults ) {
+				return array_merge( $defaults, $args );
+			}
+		);
+
+		Functions\expect( 'register_rest_route' )
+			->twice();
+
+		$plugin = Plugin::get_instance();
+		$plugin->register_rest_routes();
+
+		unset( $GLOBALS['wpdb'] );
+	} );
+
+} );

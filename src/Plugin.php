@@ -76,6 +76,7 @@ class Plugin {
 	private function init_hooks(): void {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'plugins_loaded', array( $this, 'init_components' ) );
+		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
 	}
 
 	/**
@@ -120,6 +121,16 @@ class Plugin {
 	 */
 	private function init_frontend(): void {
 		// Frontend components will be initialized here.
+	}
+
+	/**
+	 * Registers REST API routes.
+	 *
+	 * @since 1.0.0
+	 */
+	public function register_rest_routes(): void {
+		$banner_controller = new Api\Banner_Controller();
+		$banner_controller->register_routes();
 	}
 
 	/**

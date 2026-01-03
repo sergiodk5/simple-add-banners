@@ -12,6 +12,7 @@ export default mergeConfig(
       coverage: {
         exclude: [
           'src/main.ts',
+          'src/types/**',
           '**/*.config.ts',
           '**/*.config.cjs',
           '**/.eslintrc.cjs',
