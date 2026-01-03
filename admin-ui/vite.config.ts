@@ -1,12 +1,22 @@
 import { fileURLToPath, URL } from 'node:url'
+import { writeFileSync } from 'node:fs'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 
+const gitkeepPlugin = () => ({
+  name: 'gitkeep',
+  closeBundle() {
+    const outDir = fileURLToPath(new URL('../assets/admin', import.meta.url))
+    writeFileSync(`${outDir}/js/.gitkeep`, '')
+    writeFileSync(`${outDir}/css/.gitkeep`, '')
+  },
+})
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), tailwindcss()],
+  plugins: [vue(), tailwindcss(), gitkeepPlugin()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
