@@ -1,71 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import TabMenu from 'primevue/tabmenu'
+import { useRoute } from 'vue-router'
 import Toast from 'primevue/toast'
-import BannerForm from '@/components/BannerForm.vue'
-import BannerList from '@/components/BannerList.vue'
-import PlacementForm from '@/components/PlacementForm.vue'
-import PlacementList from '@/components/PlacementList.vue'
-import BannerAssignmentDialog from '@/components/BannerAssignmentDialog.vue'
-import type { Banner } from '@/types/banner'
-import type { Placement } from '@/types/placement'
 
-const bannerListRef = ref<InstanceType<typeof BannerList> | null>(null)
-const placementListRef = ref<InstanceType<typeof PlacementList> | null>(null)
+const route = useRoute()
 
-const activeTab = ref(0)
-const tabItems = [
-  { label: 'Banners', icon: 'pi pi-images' },
-  { label: 'Placements', icon: 'pi pi-th-large' },
+const menuItems = [
+  { label: 'Banners', icon: 'pi pi-images', route: '/banners', tab: 0 },
+  { label: 'Placements', icon: 'pi pi-th-large', route: '/placements', tab: 1 },
 ]
 
-// Banner state
-const bannerFormVisible = ref(false)
-const editingBanner = ref<Banner | null>(null)
-
-const handleCreateBanner = () => {
-  editingBanner.value = null
-  bannerFormVisible.value = true
-}
-
-const handleEditBanner = (banner: Banner) => {
-  editingBanner.value = banner
-  bannerFormVisible.value = true
-}
-
-const handleBannerSaved = () => {
-  bannerListRef.value?.loadBanners()
-}
-
-// Placement state
-const placementFormVisible = ref(false)
-const editingPlacement = ref<Placement | null>(null)
-
-const handleCreatePlacement = () => {
-  editingPlacement.value = null
-  placementFormVisible.value = true
-}
-
-const handleEditPlacement = (placement: Placement) => {
-  editingPlacement.value = placement
-  placementFormVisible.value = true
-}
-
-const handlePlacementSaved = () => {
-  placementListRef.value?.loadPlacements()
-}
-
-// Banner assignment state
-const assignmentDialogVisible = ref(false)
-const assigningPlacement = ref<Placement | null>(null)
-
-const handleManageBanners = (placement: Placement) => {
-  assigningPlacement.value = placement
-  assignmentDialogVisible.value = true
-}
-
-const handleAssignmentSaved = () => {
-  // Optionally refresh data if needed
+const isActive = (tab: number) => {
+  return route.meta.tab === tab
 }
 </script>
 
@@ -73,45 +18,26 @@ const handleAssignmentSaved = () => {
   <div class="tw:p-4">
     <Toast />
 
-    <TabMenu
-      v-model:active-index="activeTab"
-      :model="tabItems"
-      class="tw:mb-4"
-    />
+    <nav class="tw:flex tw:gap-1 tw:mb-6 tw:border-b tw:border-gray-200 tw:pb-2">
+      <router-link
+        v-for="item in menuItems"
+        :key="item.route"
+        :to="item.route"
+        class="tw:flex tw:items-center tw:gap-2 tw:px-4 tw:py-2 tw:rounded-md tw:text-sm tw:font-medium tw:transition-colors tw:no-underline"
+        :class="[
+          isActive(item.tab)
+            ? 'tw:bg-primary-100 tw:text-primary-700'
+            : 'tw:text-gray-600 tw:hover:bg-gray-100 tw:hover:text-gray-900',
+        ]"
+      >
+        <i
+          :class="item.icon"
+          class="tw:text-base"
+        />
+        {{ item.label }}
+      </router-link>
+    </nav>
 
-    <div v-show="activeTab === 0">
-      <BannerList
-        ref="bannerListRef"
-        @create="handleCreateBanner"
-        @edit="handleEditBanner"
-      />
-
-      <BannerForm
-        v-model:visible="bannerFormVisible"
-        :banner="editingBanner"
-        @saved="handleBannerSaved"
-      />
-    </div>
-
-    <div v-show="activeTab === 1">
-      <PlacementList
-        ref="placementListRef"
-        @create="handleCreatePlacement"
-        @edit="handleEditPlacement"
-        @manage-banners="handleManageBanners"
-      />
-
-      <PlacementForm
-        v-model:visible="placementFormVisible"
-        :placement="editingPlacement"
-        @saved="handlePlacementSaved"
-      />
-
-      <BannerAssignmentDialog
-        v-model:visible="assignmentDialogVisible"
-        :placement="assigningPlacement"
-        @saved="handleAssignmentSaved"
-      />
-    </div>
+    <router-view />
   </div>
 </template>

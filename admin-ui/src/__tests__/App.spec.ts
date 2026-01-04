@@ -1,22 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
+import { createRouter, createMemoryHistory } from 'vue-router'
 import PrimeVue from 'primevue/config'
 import ConfirmationService from 'primevue/confirmationservice'
 import ToastService from 'primevue/toastservice'
 import App from '../App.vue'
-import type { Banner } from '@/types/banner'
-
-const mockGetBanners = vi.fn()
-
-// Mock the bannerApi module
-vi.mock('@/services/bannerApi', () => ({
-  getBanners: (...args: unknown[]) => mockGetBanners(...args),
-  getBanner: vi.fn(),
-  createBanner: vi.fn(),
-  updateBanner: vi.fn(),
-  deleteBanner: vi.fn(),
-}))
 
 // Mock window.sabAdmin
 vi.stubGlobal('sabAdmin', {
@@ -25,167 +14,198 @@ vi.stubGlobal('sabAdmin', {
   adminUrl: '/wp-admin/',
 })
 
-const mockBanner: Banner = {
-  id: 1,
-  title: 'Test Banner',
-  desktop_image_id: null,
-  mobile_image_id: null,
-  desktop_url: 'https://example.com',
-  mobile_url: null,
-  start_date: null,
-  end_date: null,
-  status: 'active',
-  weight: 1,
-  created_at: '2024-01-01T00:00:00',
-  updated_at: '2024-01-01T00:00:00',
+// Mock API calls
+vi.mock('@/services/bannerApi', () => ({
+  getBanners: vi.fn().mockResolvedValue({ data: [], total: 0, totalPages: 0 }),
+  getBanner: vi.fn(),
+  createBanner: vi.fn(),
+  updateBanner: vi.fn(),
+  deleteBanner: vi.fn(),
+}))
+
+vi.mock('@/services/placementApi', () => ({
+  getPlacements: vi.fn().mockResolvedValue({ data: [], total: 0, totalPages: 0 }),
+  getPlacement: vi.fn(),
+  createPlacement: vi.fn(),
+  updatePlacement: vi.fn(),
+  deletePlacement: vi.fn(),
+}))
+
+const createTestRouter = () => {
+  return createRouter({
+    history: createMemoryHistory(),
+    routes: [
+      { path: '/', redirect: '/banners' },
+      {
+        path: '/banners',
+        name: 'banners',
+        component: { template: '<div>Banner List</div>' },
+        meta: { tab: 0 },
+      },
+      {
+        path: '/banners/create',
+        name: 'banner-create',
+        component: { template: '<div>Banner Create</div>' },
+        meta: { tab: 0 },
+      },
+      {
+        path: '/banners/:id',
+        name: 'banner-edit',
+        component: { template: '<div>Banner Edit</div>' },
+        meta: { tab: 0 },
+      },
+      {
+        path: '/placements',
+        name: 'placements',
+        component: { template: '<div>Placement List</div>' },
+        meta: { tab: 1 },
+      },
+      {
+        path: '/placements/create',
+        name: 'placement-create',
+        component: { template: '<div>Placement Create</div>' },
+        meta: { tab: 1 },
+      },
+      {
+        path: '/placements/:id',
+        name: 'placement-edit',
+        component: { template: '<div>Placement Edit</div>' },
+        meta: { tab: 1 },
+      },
+      {
+        path: '/placements/:id/banners',
+        name: 'placement-banners',
+        component: { template: '<div>Placement Banners</div>' },
+        meta: { tab: 1 },
+      },
+    ],
+  })
 }
 
 describe('App', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     vi.clearAllMocks()
-    mockGetBanners.mockResolvedValue({ data: [], total: 0, totalPages: 0 })
   })
 
-  const mountApp = () => {
-    return mount(App, {
+  const mountApp = async (initialRoute = '/banners') => {
+    const router = createTestRouter()
+    router.push(initialRoute)
+    await router.isReady()
+
+    const wrapper = mount(App, {
       global: {
-        plugins: [createPinia(), PrimeVue, ConfirmationService, ToastService],
+        plugins: [createPinia(), router, PrimeVue, ConfirmationService, ToastService],
         stubs: {
           Toast: true,
-          ConfirmDialog: true,
-          DataTable: {
-            template: '<div class="datatable-stub"><slot name="empty" /></div>',
-          },
-          Column: true,
-          Dialog: true,
         },
       },
     })
+
+    await flushPromises()
+    return { wrapper, router }
   }
 
-  it('renders the app container', () => {
-    const wrapper = mountApp()
+  it('renders the app container', async () => {
+    const { wrapper } = await mountApp()
     expect(wrapper.find('.tw\\:p-4').exists()).toBe(true)
   })
 
-  it('renders the BannerList component', () => {
-    const wrapper = mountApp()
-    expect(wrapper.findComponent({ name: 'BannerList' }).exists()).toBe(true)
+  it('renders the navigation menu', async () => {
+    const { wrapper } = await mountApp()
+    expect(wrapper.find('nav').exists()).toBe(true)
   })
 
-  it('renders the BannerForm component', () => {
-    const wrapper = mountApp()
-    expect(wrapper.findComponent({ name: 'BannerForm' }).exists()).toBe(true)
-  })
-
-  it('has the form dialog hidden by default', () => {
-    const wrapper = mountApp()
-    const bannerForm = wrapper.findComponent({ name: 'BannerForm' })
-    expect(bannerForm.props('visible')).toBe(false)
-  })
-
-  it('shows Add Banner button', () => {
-    const wrapper = mountApp()
-    expect(wrapper.text()).toContain('Add Banner')
-  })
-
-  it('displays Banners heading', () => {
-    const wrapper = mountApp()
+  it('has Banners and Placements menu items', async () => {
+    const { wrapper } = await mountApp()
+    const links = wrapper.findAll('nav a')
+    expect(links.length).toBe(2)
     expect(wrapper.text()).toContain('Banners')
+    expect(wrapper.text()).toContain('Placements')
   })
 
-  it('shows empty state message when no banners', () => {
-    const wrapper = mountApp()
-    expect(wrapper.text()).toContain('No banners found')
+  it('shows Banners link as active on banners route', async () => {
+    const { wrapper } = await mountApp('/banners')
+    const bannersLink = wrapper.find('nav a[href="/banners"]')
+    expect(bannersLink.classes()).toContain('tw:bg-primary-100')
+  })
+
+  it('shows Placements link as active on placements route', async () => {
+    const { wrapper } = await mountApp('/placements')
+    const placementsLink = wrapper.find('nav a[href="/placements"]')
+    expect(placementsLink.classes()).toContain('tw:bg-primary-100')
+  })
+
+  it('renders router-view content', async () => {
+    const { wrapper } = await mountApp()
+    expect(wrapper.text()).toContain('Banner List')
   })
 })
 
-describe('App event handlers', () => {
+describe('App routing', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     vi.clearAllMocks()
-    mockGetBanners.mockResolvedValue({ data: [], total: 0, totalPages: 0 })
   })
 
-  it('opens create dialog when BannerList emits create', async () => {
+  const mountApp = async (initialRoute = '/banners') => {
+    const router = createTestRouter()
+    router.push(initialRoute)
+    await router.isReady()
+
     const wrapper = mount(App, {
       global: {
-        plugins: [createPinia(), PrimeVue, ConfirmationService, ToastService],
+        plugins: [createPinia(), router, PrimeVue, ConfirmationService, ToastService],
         stubs: {
           Toast: true,
-          ConfirmDialog: true,
-          DataTable: {
-            template: '<div class="datatable-stub"><slot name="empty" /></div>',
-          },
-          Column: true,
-          Dialog: true,
         },
       },
     })
 
     await flushPromises()
+    return { wrapper, router }
+  }
 
-    const bannerList = wrapper.findComponent({ name: 'BannerList' })
-    await bannerList.vm.$emit('create')
-
-    const bannerForm = wrapper.findComponent({ name: 'BannerForm' })
-    expect(bannerForm.props('visible')).toBe(true)
-    expect(bannerForm.props('banner')).toBeNull()
+  it('navigates to banner list on initial load', async () => {
+    const { wrapper } = await mountApp('/')
+    await flushPromises()
+    expect(wrapper.text()).toContain('Banner List')
   })
 
-  it('opens edit dialog when BannerList emits edit', async () => {
-    const wrapper = mount(App, {
-      global: {
-        plugins: [createPinia(), PrimeVue, ConfirmationService, ToastService],
-        stubs: {
-          Toast: true,
-          ConfirmDialog: true,
-          DataTable: {
-            template: '<div class="datatable-stub"><slot name="empty" /></div>',
-          },
-          Column: true,
-          Dialog: true,
-        },
-      },
-    })
-
+  it('navigates to placement list route', async () => {
+    const { wrapper, router } = await mountApp()
+    await router.push('/placements')
     await flushPromises()
-
-    const bannerList = wrapper.findComponent({ name: 'BannerList' })
-    await bannerList.vm.$emit('edit', mockBanner)
-
-    const bannerForm = wrapper.findComponent({ name: 'BannerForm' })
-    expect(bannerForm.props('visible')).toBe(true)
-    expect(bannerForm.props('banner')).toEqual(mockBanner)
+    expect(wrapper.text()).toContain('Placement List')
   })
 
-  it('reloads banners when BannerForm emits saved', async () => {
-    mockGetBanners.mockResolvedValue({ data: [mockBanner], total: 1, totalPages: 1 })
-
-    const wrapper = mount(App, {
-      global: {
-        plugins: [createPinia(), PrimeVue, ConfirmationService, ToastService],
-        stubs: {
-          Toast: true,
-          ConfirmDialog: true,
-          DataTable: {
-            template: '<div class="datatable-stub"><slot name="empty" /></div>',
-          },
-          Column: true,
-          Dialog: true,
-        },
-      },
-    })
-
+  it('navigates to banner create route', async () => {
+    const { wrapper, router } = await mountApp()
+    await router.push('/banners/create')
     await flushPromises()
-    vi.clearAllMocks()
-    mockGetBanners.mockResolvedValue({ data: [mockBanner], total: 1, totalPages: 1 })
+    expect(wrapper.text()).toContain('Banner Create')
+  })
 
-    const bannerForm = wrapper.findComponent({ name: 'BannerForm' })
-    await bannerForm.vm.$emit('saved')
+  it('navigates to placement banners route', async () => {
+    const { wrapper, router } = await mountApp()
+    await router.push('/placements/1/banners')
+    await flushPromises()
+    expect(wrapper.text()).toContain('Placement Banners')
+  })
+
+  it('updates active link when navigating between sections', async () => {
+    const { wrapper, router } = await mountApp('/banners')
+
+    let bannersLink = wrapper.find('nav a[href="/banners"]')
+    expect(bannersLink.classes()).toContain('tw:bg-primary-100')
+
+    await router.push('/placements')
     await flushPromises()
 
-    expect(mockGetBanners).toHaveBeenCalled()
+    const placementsLink = wrapper.find('nav a[href="/placements"]')
+    expect(placementsLink.classes()).toContain('tw:bg-primary-100')
+
+    bannersLink = wrapper.find('nav a[href="/banners"]')
+    expect(bannersLink.classes()).not.toContain('tw:bg-primary-100')
   })
 })
