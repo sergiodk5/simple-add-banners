@@ -121,7 +121,7 @@ class Plugin {
 	 * @since 1.0.0
 	 */
 	private function init_frontend(): void {
-		// Frontend components will be initialized here.
+		new Frontend\Shortcode_Handler();
 	}
 
 	/**

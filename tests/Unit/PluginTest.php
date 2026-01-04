@@ -92,9 +92,18 @@ describe('Plugin Component Initialization', function () {
 
 	it('initializes frontend components when is_admin returns false', function () {
 		Functions\when('is_admin')->justReturn(false);
+		Functions\when('add_shortcode')->justReturn(true);
+
+		// Mock wpdb for the repositories.
+		$wpdb         = Mockery::mock('wpdb');
+		$wpdb->prefix = 'wp_';
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$GLOBALS['wpdb'] = $wpdb;
 
 		$plugin = Plugin::get_instance();
 		$plugin->init_components();
+
+		unset($GLOBALS['wpdb']);
 
 		// If we reach here without error, frontend init worked.
 		expect(true)->toBeTrue();
