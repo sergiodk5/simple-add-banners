@@ -28,3 +28,12 @@ indent_size = 4
 [package.json]
 indent_style = space
 indent_size = 2
+
+# Vue/TypeScript files use 2 spaces
+[*.{ts,tsx,vue}]
+indent_style = space
+indent_size = 2
+
+[*.{js,jsx}]
+indent_style = space
+indent_size = 2
