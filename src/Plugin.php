@@ -14,6 +14,7 @@ namespace SimpleAddBanners;
  */
 class Plugin {
 
+
 	/**
 	 * Plugin version.
 	 *
@@ -131,6 +132,9 @@ class Plugin {
 	public function register_rest_routes(): void {
 		$banner_controller = new Api\Banner_Controller();
 		$banner_controller->register_routes();
+
+		$placement_controller = new Api\Placement_Controller();
+		$placement_controller->register_routes();
 	}
 
 	/**
