@@ -103,8 +103,8 @@ describe('Plugin Component Initialization', function () {
 
 describe('Plugin REST API Routes', function () {
 
-	it('registers banner and placement REST routes', function () {
-		// Mock wpdb for the Banner_Controller and Placement_Controller constructors.
+	it('registers banner, placement, and banner-placement REST routes', function () {
+		// Mock wpdb for the controllers constructors.
 		$wpdb         = Mockery::mock('wpdb');
 		$wpdb->prefix = 'wp_';
 		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
@@ -117,9 +117,11 @@ describe('Plugin REST API Routes', function () {
 			}
 		);
 
-		// 2 routes for Banner (collection + single) + 2 routes for Placement (collection + single).
+		// 2 routes for Banner (collection + single)
+		// + 2 routes for Placement (collection + single)
+		// + 3 routes for Banner-Placement (GET/PUT, POST, DELETE).
 		Functions\expect('register_rest_route')
-			->times(4);
+			->times(7);
 
 		$plugin = Plugin::get_instance();
 		$plugin->register_rest_routes();

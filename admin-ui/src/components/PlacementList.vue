@@ -14,6 +14,7 @@ import type { Placement } from '@/types/placement'
 const emit = defineEmits<{
   edit: [placement: Placement]
   create: []
+  'manage-banners': [placement: Placement]
 }>()
 
 const confirm = useConfirm()
@@ -179,10 +180,19 @@ defineExpose({ loadPlacements })
 
       <Column
         header="Actions"
-        style="width: 150px"
+        style="width: 200px"
       >
         <template #body="{ data }">
           <div class="tw:flex tw:gap-2">
+            <Button
+              v-tooltip.top="'Manage Banners'"
+              icon="pi pi-images"
+              severity="secondary"
+              size="small"
+              outlined
+              aria-label="Manage Banners"
+              @click="emit('manage-banners', data)"
+            />
             <Button
               icon="pi pi-pencil"
               severity="info"

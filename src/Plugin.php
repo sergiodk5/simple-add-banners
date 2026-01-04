@@ -135,6 +135,9 @@ class Plugin {
 
 		$placement_controller = new Api\Placement_Controller();
 		$placement_controller->register_routes();
+
+		$banner_placement_controller = new Api\Banner_Placement_Controller();
+		$banner_placement_controller->register_routes();
 	}
 
 	/**
