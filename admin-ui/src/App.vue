@@ -7,6 +7,7 @@ const route = useRoute()
 const menuItems = [
   { label: 'Banners', icon: 'pi pi-images', route: '/banners', tab: 0 },
   { label: 'Placements', icon: 'pi pi-th-large', route: '/placements', tab: 1 },
+  { label: 'Statistics', icon: 'pi pi-chart-bar', route: '/statistics', tab: 2 },
 ]
 
 const isActive = (tab: number) => {

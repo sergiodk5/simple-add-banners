@@ -51,6 +51,19 @@ const routes: RouteRecordRaw[] = [
     props: true,
     meta: { tab: 1 },
   },
+  {
+    path: '/statistics',
+    name: 'statistics',
+    component: () => import('@/views/StatisticsView.vue'),
+    meta: { tab: 2 },
+  },
+  {
+    path: '/statistics/banners/:id',
+    name: 'banner-statistics',
+    component: () => import('@/views/BannerStatisticsView.vue'),
+    props: true,
+    meta: { tab: 2 },
+  },
 ]
 
 const router = createRouter({

@@ -131,9 +131,10 @@ describe('Plugin REST API Routes', function () {
 		// 2 routes for Banner (collection + single)
 		// + 2 routes for Placement (collection + single)
 		// + 3 routes for Banner-Placement (GET/PUT, POST, DELETE)
-		// + 1 route for Impression tracking.
+		// + 1 route for Impression tracking
+		// + 3 routes for Statistics (collection, banner, placement).
 		Functions\expect('register_rest_route')
-			->times(8);
+			->times(11);
 
 		$plugin = Plugin::get_instance();
 		$plugin->register_rest_routes();

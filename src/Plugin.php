@@ -171,6 +171,9 @@ class Plugin {
 
 		$impression_controller = new Tracking\Impression_Controller();
 		$impression_controller->register_routes();
+
+		$statistics_controller = new Api\Statistics_Controller();
+		$statistics_controller->register_routes();
 	}
 
 	/**

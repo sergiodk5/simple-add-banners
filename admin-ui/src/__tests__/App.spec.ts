@@ -78,6 +78,18 @@ const createTestRouter = () => {
         component: { template: '<div>Placement Banners</div>' },
         meta: { tab: 1 },
       },
+      {
+        path: '/statistics',
+        name: 'statistics',
+        component: { template: '<div>Statistics</div>' },
+        meta: { tab: 2 },
+      },
+      {
+        path: '/statistics/banners/:id',
+        name: 'banner-statistics',
+        component: { template: '<div>Banner Statistics</div>' },
+        meta: { tab: 2 },
+      },
     ],
   })
 }
@@ -116,12 +128,13 @@ describe('App', () => {
     expect(wrapper.find('nav').exists()).toBe(true)
   })
 
-  it('has Banners and Placements menu items', async () => {
+  it('has Banners, Placements, and Statistics menu items', async () => {
     const { wrapper } = await mountApp()
     const links = wrapper.findAll('nav a')
-    expect(links.length).toBe(2)
+    expect(links.length).toBe(3)
     expect(wrapper.text()).toContain('Banners')
     expect(wrapper.text()).toContain('Placements')
+    expect(wrapper.text()).toContain('Statistics')
   })
 
   it('shows Banners link as active on banners route', async () => {

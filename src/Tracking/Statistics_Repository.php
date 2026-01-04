@@ -264,6 +264,70 @@ class Statistics_Repository {
 	}
 
 	/**
+	 * Get aggregated statistics for all banners.
+	 *
+	 * Returns totals grouped by banner with banner title.
+	 *
+	 * @param string|null $start_date Optional start date (Y-m-d).
+	 * @param string|null $end_date   Optional end date (Y-m-d).
+	 * @return array Array of aggregated statistics per banner.
+	 */
+	public function get_all_banner_stats( ?string $start_date = null, ?string $end_date = null ): array {
+		$banners_table = $this->wpdb->prefix . 'sab_banners';
+		$where_clauses = array();
+		$values        = array();
+
+		if ( $start_date ) {
+			$where_clauses[] = 's.stat_date >= %s';
+			$values[]        = $start_date;
+		}
+
+		if ( $end_date ) {
+			$where_clauses[] = 's.stat_date <= %s';
+			$values[]        = $end_date;
+		}
+
+		$where_sql = ! empty( $where_clauses ) ? 'WHERE ' . implode( ' AND ', $where_clauses ) : '';
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.PreparedSQL.NotPrepared
+		$sql = "SELECT
+				b.id as banner_id,
+				b.title as banner_title,
+				b.status as banner_status,
+				COALESCE(SUM(s.impressions), 0) as impressions,
+				COALESCE(SUM(s.clicks), 0) as clicks
+			FROM {$banners_table} b
+			LEFT JOIN {$this->table_name} s ON b.id = s.banner_id
+			{$where_sql}
+			GROUP BY b.id, b.title, b.status
+			ORDER BY impressions DESC";
+
+		if ( ! empty( $values ) ) {
+			$sql = $this->wpdb->prepare( $sql, $values );
+		}
+
+		$results = $this->wpdb->get_results( $sql, ARRAY_A );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.PreparedSQL.NotPrepared
+
+		return array_map(
+			function ( $row ) {
+				$impressions = (int) $row['impressions'];
+				$clicks      = (int) $row['clicks'];
+
+				return array(
+					'banner_id'     => (int) $row['banner_id'],
+					'banner_title'  => $row['banner_title'],
+					'banner_status' => $row['banner_status'],
+					'impressions'   => $impressions,
+					'clicks'        => $clicks,
+					'ctr'           => $impressions > 0 ? round( ( $clicks / $impressions ) * 100, 2 ) : 0,
+				);
+			},
+			$results ? $results : array()
+		);
+	}
+
+	/**
 	 * Get the current date in UTC.
 	 *
 	 * @return string The date in Y-m-d format.
