@@ -4,18 +4,20 @@ A self-hosted WordPress plugin for displaying commercial banners with impression
 
 ## Features
 
-### Implemented (MVP)
+### Implemented
 - Banner management with desktop/mobile image variants
 - WordPress Media Library integration for image selection
-- REST API for banner CRUD operations
+- REST API for banner and placement CRUD operations
 - Vue 3 + TypeScript admin interface with PrimeVue components
+- Vue Router navigation with full-page views
 - Start/end date scheduling
-- Status management (active/inactive)
+- Status management (active/paused)
 - Weight-based priority system
+- Placement management (define where banners appear)
+- Banner-placement assignments (assign banners to placements)
+- Banner rotation strategies (random, weighted, sequential)
 
 ### Planned
-- Placement management (define where banners appear)
-- Banner rotation strategies (random, weighted, ordered)
 - Shortcode rendering
 - Widget support
 - Impression tracking (client-side, cache-safe)
@@ -111,6 +113,10 @@ npm run test:run
 npm run test:coverage
 ```
 
+Current test coverage:
+- **PHP**: 100% line coverage
+- **JavaScript/Vue**: ~90% line coverage
+
 ### Dependency Scoping
 
 Runtime dependencies are scoped using wpify/scoper to prevent conflicts with other plugins:
@@ -131,12 +137,16 @@ simple-add-banners/
 ├── src/                      # PHP classes (PSR-4)
 │   ├── Plugin.php            # Main plugin class
 │   ├── Admin/                # Admin functionality
-│   ├── Api/                  # REST API endpoints
-│   ├── Database/             # Database operations
+│   ├── Api/                  # REST API controllers
+│   ├── Database/             # Database schema & migrations
+│   ├── Repository/           # Data access layer
 │   └── ...
 ├── admin-ui/                 # Vue 3 admin interface
 │   ├── src/
-│   │   ├── components/       # Vue components
+│   │   ├── components/       # Reusable Vue components
+│   │   ├── views/            # Full-page view components
+│   │   ├── router/           # Vue Router configuration
+│   │   ├── stores/           # Pinia state stores
 │   │   ├── services/         # API client & services
 │   │   ├── types/            # TypeScript definitions
 │   │   └── ...
@@ -153,8 +163,9 @@ Uses PSR-4 autoloading with the `SimpleAddBanners` namespace:
 ```php
 SimpleAddBanners\              # Root namespace
 SimpleAddBanners\Admin\        # Admin classes
-SimpleAddBanners\Api\          # REST API classes
-SimpleAddBanners\Database\     # Database classes
+SimpleAddBanners\Api\          # REST API controllers
+SimpleAddBanners\Database\     # Database schema & migrations
+SimpleAddBanners\Repository\   # Data access layer
 ```
 
 ### Key Constants
