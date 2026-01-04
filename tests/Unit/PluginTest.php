@@ -93,6 +93,7 @@ describe('Plugin Component Initialization', function () {
 	it('initializes frontend components when is_admin returns false', function () {
 		Functions\when('is_admin')->justReturn(false);
 		Functions\when('add_shortcode')->justReturn(true);
+		Functions\when('add_action')->justReturn(true);
 
 		// Mock wpdb for the repositories.
 		$wpdb         = Mockery::mock('wpdb');
@@ -112,7 +113,7 @@ describe('Plugin Component Initialization', function () {
 
 describe('Plugin REST API Routes', function () {
 
-	it('registers banner, placement, and banner-placement REST routes', function () {
+	it('registers banner, placement, banner-placement and tracking REST routes', function () {
 		// Mock wpdb for the controllers constructors.
 		$wpdb         = Mockery::mock('wpdb');
 		$wpdb->prefix = 'wp_';
@@ -125,12 +126,14 @@ describe('Plugin REST API Routes', function () {
 				return array_merge($defaults, $args);
 			}
 		);
+		Functions\when('get_option')->justReturn('test_secret');
 
 		// 2 routes for Banner (collection + single)
 		// + 2 routes for Placement (collection + single)
-		// + 3 routes for Banner-Placement (GET/PUT, POST, DELETE).
+		// + 3 routes for Banner-Placement (GET/PUT, POST, DELETE)
+		// + 1 route for Impression tracking.
 		Functions\expect('register_rest_route')
-			->times(7);
+			->times(8);
 
 		$plugin = Plugin::get_instance();
 		$plugin->register_rest_routes();

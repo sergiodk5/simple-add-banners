@@ -16,11 +16,11 @@ A self-hosted WordPress plugin for displaying commercial banners with impression
 - Placement management (define where banners appear)
 - Banner-placement assignments (assign banners to placements)
 - Banner rotation strategies (random, weighted, sequential)
+- Shortcode rendering: `[sab_banner placement="slug"]`
+- Impression tracking (client-side, cache-safe, GDPR-aware)
 
 ### Planned
-- Shortcode rendering
 - Widget support
-- Impression tracking (client-side, cache-safe)
 - Click tracking via redirect endpoint
 - Aggregated daily statistics
 - Admin reporting UI

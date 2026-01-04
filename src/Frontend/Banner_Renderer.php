@@ -7,12 +7,30 @@
 
 namespace SimpleAddBanners\Frontend;
 
+use SimpleAddBanners\Tracking\Token_Generator;
+
 /**
  * Class Banner_Renderer
  *
  * Renders banner HTML with responsive images and proper escaping.
  */
 class Banner_Renderer {
+
+	/**
+	 * Token generator instance.
+	 *
+	 * @var Token_Generator
+	 */
+	private Token_Generator $token_generator;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param Token_Generator|null $token_generator Token generator instance.
+	 */
+	public function __construct( ?Token_Generator $token_generator = null ) {
+		$this->token_generator = $token_generator ?? new Token_Generator();
+	}
 
 	/**
 	 * Render a banner as HTML.
@@ -29,11 +47,20 @@ class Banner_Renderer {
 			return '';
 		}
 
-		$link_url  = $this->get_link_url( $banner );
-		$banner_id = isset( $banner['id'] ) ? (int) $banner['id'] : 0;
-		$slug      = isset( $placement['slug'] ) ? $placement['slug'] : '';
+		$link_url     = $this->get_link_url( $banner );
+		$banner_id    = isset( $banner['id'] ) ? (int) $banner['id'] : 0;
+		$placement_id = isset( $placement['id'] ) ? (int) $placement['id'] : 0;
+		$slug         = isset( $placement['slug'] ) ? $placement['slug'] : '';
 
-		$output  = '<div class="sab-banner" data-placement="' . esc_attr( $slug ) . '" data-banner-id="' . esc_attr( $banner_id ) . '">';
+		// Generate tracking token.
+		$token = $this->token_generator->generate( $banner_id, $placement_id );
+
+		$output  = '<div class="sab-banner"';
+		$output .= ' data-placement="' . esc_attr( $slug ) . '"';
+		$output .= ' data-banner-id="' . esc_attr( $banner_id ) . '"';
+		$output .= ' data-placement-id="' . esc_attr( $placement_id ) . '"';
+		$output .= ' data-track-token="' . esc_attr( $token ) . '"';
+		$output .= '>';
 		$output .= '<style>.sab-banner{display:block}.sab-banner img{max-width:100%;height:auto;display:block}</style>';
 
 		if ( ! empty( $link_url ) ) {

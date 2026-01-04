@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SimpleAddBanners\Tests\Unit\Frontend;
 
 use SimpleAddBanners\Frontend\Banner_Renderer;
+use SimpleAddBanners\Tracking\Token_Generator;
 use Brain\Monkey\Functions;
 
 beforeEach(function () {
@@ -41,6 +42,16 @@ beforeEach(function () {
 	Functions\when('esc_attr')->returnArg();
 	Functions\when('esc_url')->returnArg();
 	Functions\when('esc_html')->returnArg();
+
+	// Mock get_option for token generator.
+	Functions\when('get_option')->justReturn('test_tracking_secret');
+
+	// Create mock token generator.
+	$this->token_generator = \Mockery::mock(Token_Generator::class);
+	$this->token_generator->shouldReceive('generate')
+		->andReturnUsing(function ($banner_id, $placement_id) {
+			return 'mock_token_' . $banner_id . '_' . $placement_id;
+		});
 });
 
 describe('Banner_Renderer::render()', function () {
@@ -53,9 +64,9 @@ describe('Banner_Renderer::render()', function () {
 			'desktop_url' => 'https://example.com',
 		];
 
-		$placement = ['slug' => 'header'];
+		$placement = ['id' => 1, 'slug' => 'header'];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->render($banner, $placement);
 
 		expect($result)->toBe('');
@@ -70,9 +81,9 @@ describe('Banner_Renderer::render()', function () {
 			'desktop_url' => 'https://example.com/click',
 		];
 
-		$placement = ['slug' => 'header'];
+		$placement = ['id' => 2, 'slug' => 'header'];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->render($banner, $placement);
 
 		expect($result)->toContain('class="sab-banner"');
@@ -92,9 +103,9 @@ describe('Banner_Renderer::render()', function () {
 			'desktop_url' => 'https://example.com/click',
 		];
 
-		$placement = ['slug' => 'header'];
+		$placement = ['id' => 1, 'slug' => 'header'];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->render($banner, $placement);
 
 		expect($result)->toContain('<picture>');
@@ -112,9 +123,9 @@ describe('Banner_Renderer::render()', function () {
 			'desktop_url' => '',
 		];
 
-		$placement = ['slug' => 'header'];
+		$placement = ['id' => 1, 'slug' => 'header'];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->render($banner, $placement);
 
 		expect($result)->not->toContain('<a href');
@@ -130,9 +141,9 @@ describe('Banner_Renderer::render()', function () {
 			'desktop_url' => 'https://example.com/click',
 		];
 
-		$placement = ['slug' => 'header'];
+		$placement = ['id' => 1, 'slug' => 'header'];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->render($banner, $placement);
 
 		expect($result)->toContain('target="_blank"');
@@ -148,9 +159,9 @@ describe('Banner_Renderer::render()', function () {
 			'desktop_url' => 'https://example.com/click',
 		];
 
-		$placement = ['slug' => 'header'];
+		$placement = ['id' => 1, 'slug' => 'header'];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->render($banner, $placement);
 
 		expect($result)->toContain('<style>');
@@ -167,12 +178,30 @@ describe('Banner_Renderer::render()', function () {
 			'desktop_url' => 'https://example.com',
 		];
 
-		$placement = ['slug' => 'header'];
+		$placement = ['id' => 1, 'slug' => 'header'];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->render($banner, $placement);
 
 		expect($result)->toContain('loading="lazy"');
+	});
+
+	it('includes tracking data attributes', function () {
+		$banner = [
+			'id' => 5,
+			'title' => 'Test Banner',
+			'desktop_image_id' => 10,
+			'mobile_image_id' => null,
+			'desktop_url' => 'https://example.com',
+		];
+
+		$placement = ['id' => 3, 'slug' => 'sidebar'];
+
+		$renderer = new Banner_Renderer($this->token_generator);
+		$result = $renderer->render($banner, $placement);
+
+		expect($result)->toContain('data-placement-id="3"');
+		expect($result)->toContain('data-track-token="mock_token_5_3"');
 	});
 });
 
@@ -183,7 +212,7 @@ describe('Banner_Renderer::get_image_html()', function () {
 			'mobile_image_id' => null,
 		];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->get_image_html($banner);
 
 		expect($result)->toBe('');
@@ -203,7 +232,7 @@ describe('Banner_Renderer::get_image_html()', function () {
 			'mobile_image_id' => null,
 		];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->get_image_html($banner);
 
 		expect($result)->toBe('');
@@ -215,7 +244,7 @@ describe('Banner_Renderer::get_image_html()', function () {
 			'mobile_image_id' => 20,
 		];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->get_image_html($banner);
 
 		expect($result)->toContain('src="https://example.com/mobile.jpg"');
@@ -227,7 +256,7 @@ describe('Banner_Renderer::get_image_html()', function () {
 			'mobile_image_id' => null,
 		];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->get_image_html($banner);
 
 		expect($result)->toContain('src="https://example.com/desktop.jpg"');
@@ -242,7 +271,7 @@ describe('Banner_Renderer::get_image_html()', function () {
 			'mobile_image_id' => null,
 		];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->get_image_html($banner);
 
 		// No source element needed when URLs are identical.
@@ -257,7 +286,7 @@ describe('Banner_Renderer::get_link_url()', function () {
 			'mobile_url' => 'https://example.com/mobile',
 		];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->get_link_url($banner);
 
 		expect($result)->toBe('https://example.com/desktop');
@@ -268,7 +297,7 @@ describe('Banner_Renderer::get_link_url()', function () {
 			'desktop_url' => '',
 		];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->get_link_url($banner);
 
 		expect($result)->toBe('');
@@ -279,7 +308,7 @@ describe('Banner_Renderer::get_link_url()', function () {
 			'desktop_url' => null,
 		];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->get_link_url($banner);
 
 		expect($result)->toBe('');
@@ -296,9 +325,9 @@ describe('Banner_Renderer alt text', function () {
 			'desktop_url' => 'https://example.com',
 		];
 
-		$placement = ['slug' => 'header'];
+		$placement = ['id' => 1, 'slug' => 'header'];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->render($banner, $placement);
 
 		expect($result)->toContain('alt="Desktop alt text"');
@@ -315,9 +344,9 @@ describe('Banner_Renderer alt text', function () {
 			'desktop_url' => 'https://example.com',
 		];
 
-		$placement = ['slug' => 'header'];
+		$placement = ['id' => 1, 'slug' => 'header'];
 
-		$renderer = new Banner_Renderer();
+		$renderer = new Banner_Renderer($this->token_generator);
 		$result = $renderer->render($banner, $placement);
 
 		expect($result)->toContain('alt="Banner Title Fallback"');

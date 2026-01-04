@@ -122,6 +122,36 @@ class Plugin {
 	 */
 	private function init_frontend(): void {
 		new Frontend\Shortcode_Handler();
+		$this->enqueue_tracking_scripts();
+	}
+
+	/**
+	 * Enqueues frontend tracking scripts.
+	 *
+	 * @since 1.0.0
+	 */
+	private function enqueue_tracking_scripts(): void {
+		add_action(
+			'wp_enqueue_scripts',
+			function () {
+				wp_enqueue_script(
+					'sab-tracking',
+					$this->plugin_url . 'assets/public/js/sab-tracking.js',
+					array(),
+					self::VERSION,
+					true
+				);
+
+				wp_localize_script(
+					'sab-tracking',
+					'sabTracking',
+					array(
+						'restUrl' => rest_url( 'sab/v1/' ),
+						'nonce'   => wp_create_nonce( 'wp_rest' ),
+					)
+				);
+			}
+		);
 	}
 
 	/**
@@ -138,6 +168,9 @@ class Plugin {
 
 		$banner_placement_controller = new Api\Banner_Placement_Controller();
 		$banner_placement_controller->register_routes();
+
+		$impression_controller = new Tracking\Impression_Controller();
+		$impression_controller->register_routes();
 	}
 
 	/**

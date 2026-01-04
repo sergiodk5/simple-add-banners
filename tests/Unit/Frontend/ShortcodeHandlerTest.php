@@ -52,6 +52,9 @@ beforeEach(function () {
 	// Mock get_post_meta for alt text.
 	Functions\when('get_post_meta')->justReturn('Alt text');
 
+	// Mock get_option for Token_Generator.
+	Functions\when('get_option')->justReturn('test_tracking_secret');
+
 	// Create mock repositories.
 	$this->placement_repo = \Mockery::mock(Placement_Repository::class);
 	$this->bp_repo = \Mockery::mock(Banner_Placement_Repository::class);
